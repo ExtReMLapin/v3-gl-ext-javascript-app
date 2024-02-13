@@ -49,47 +49,88 @@
 	</div>
 </template>
 
-<script setup lang="ts">
+<script>
 import { RouterLink, RouterView } from 'vue-router'
-import { ref } from "vue";
 import { prefinedLayouts } from "@/ts/predefined-layouts";
 import C3 from "@/components/Content3.vue";
 import { GoldenLayout } from './components/index';
 
-const GLayoutRoot = ref<null | typeof GoldenLayout>(null);
-const onClickInitLayoutMinRow = () => {
-	if (!GLayoutRoot.value) return;
-	GLayoutRoot.value.loadGLLayout(prefinedLayouts.miniRow);
+
+export default {
+  name: "App",
+  components: { GoldenLayout, C3, RouterLink  },
+
+  watch: {
+   
+  },
+  beforeMount() {
+   
+  },
+
+  mounted() {
+   
+  },
+  unmounted() {
+  },
+
+  data() {
+    return {
+		prefinedLayouts:prefinedLayouts,
+     
+    };
+  },
+
+  computed:
+  {
+    
+
+  },
+
+  methods: {
+	onClickInitLayoutMinRow () {
+		const GLayoutRoot = this.$refs.GLayoutRoot;
+		if (!GLayoutRoot) return;
+		GLayoutRoot.loadGLLayout(prefinedLayouts.miniRow);
+	},
+
+	onClickAddGlComponent1 () {
+		const GLayoutRoot = this.$refs.GLayoutRoot;
+		console.log(GLayoutRoot, GLayoutRoot.addGlComponent, GLayoutRoot)
+		if (!GLayoutRoot) return;
+		GLayoutRoot.addGlComponent("Content1", "Title 1st", {abc:"lol"});
+	},
+
+	onClickAddGlComponent2 () {
+		const GLayoutRoot = this.$refs.GLayoutRoot;
+		if (!GLayoutRoot) return;
+		GLayoutRoot.addGlComponent("Content2", "I'm wide");
+	},
+
+	onClickAddGlComponent3 () {
+		const GLayoutRoot = this.$refs.GLayoutRoot;
+		if (!GLayoutRoot) return;
+		GLayoutRoot.addGlComponent("Content3", "I'm high");
+	},
+
+	onClickSaveLayout () {
+		const GLayoutRoot = this.$refs.GLayoutRoot;
+		if (!GLayoutRoot) return;
+		const config = GLayoutRoot.getLayoutConfig();
+		localStorage.setItem("gl_config", JSON.stringify(config));
+	},
+
+	onClickLoadLayout () {
+		const GLayoutRoot = this.$refs.GLayoutRoot;
+		const str = localStorage.getItem("gl_config");
+		if (!str) return;
+		if (!GLayoutRoot) return;
+		const config = JSON.parse(str);
+		GLayoutRoot.loadGLLayout(config);
+	},
+  }
 };
 
-const onClickAddGlComponent1 = () => {
-	if (!GLayoutRoot.value) return;
-	GLayoutRoot.value.addGlComponent("Content1", "Title 1st");
-};
 
-const onClickAddGlComponent2 = () => {
-	if (!GLayoutRoot.value) return;
-	GLayoutRoot.value.addGlComponent("Content2", "I'm wide");
-};
-
-const onClickAddGlComponent3 = () => {
-	if (!GLayoutRoot.value) return;
-	GLayoutRoot.value.addGlComponent("Content3", "I'm high");
-};
-
-const onClickSaveLayout = () => {
-	if (!GLayoutRoot.value) return;
-	const config = GLayoutRoot.value.getLayoutConfig();
-	localStorage.setItem("gl_config", JSON.stringify(config));
-};
-
-const onClickLoadLayout = () => {
-	const str = localStorage.getItem("gl_config");
-	if (!str) return;
-	if (!GLayoutRoot.value) return;
-	const config = JSON.parse(str as string);
-	GLayoutRoot.value.loadGLLayout(config);
-};
 </script>
 
 <style scoped>
